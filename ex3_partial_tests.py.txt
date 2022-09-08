@@ -1,0 +1,108 @@
+"""
+To run the tests, just place this file in the same directory with your ex3.py
+file and run it.
+"""
+import unittest
+import ex3 as ex3
+
+NO_ITEM = -1
+OK = 0
+
+class TestBST(unittest.TestCase):
+    def test_from_sorted(self):
+        bst = ex3.BST.create_BST_from_sorted_arr([1, 2, 3, 4, 5, 6, 7])
+        self.assertEqual(bst.inorder_traversal(), [1, 2, 3, 4, 5, 6, 7])
+        self.assertEqual(bst.preorder_traversal(), [4, 2, 1, 3, 6, 5, 7])
+        self.assertEqual(bst.postorder_traversal(), [1, 3, 2, 5, 7, 6, 4])
+
+    def test_bst_simple(self):
+        bst = ex3.BST()
+        bst.insert(1, 'a')
+        bst.insert(2, 'b')
+        bst.insert(3, 'c')
+        self.assertEqual(bst.inorder_traversal(), [1, 2, 3])
+
+        node = bst.find(1)
+        self.assertIsNotNone(node)
+        self.assertEqual(node.key, 1)
+        self.assertEqual(node.value, 'a')
+
+        bst.delete(2)
+        self.assertEqual(bst.inorder_traversal(), [1, 3])
+
+    def test_bst_insert_basic1(self):
+        bst = ex3.BST()
+        bst.insert(1, 'a')
+        self.assertEqual(bst.inorder_traversal(), [1])
+        self.assertEqual(bst.preorder_traversal(), [1])
+        self.assertEqual(bst.postorder_traversal(), [1])
+
+    def test_bst_delete_basic1(self):
+        bst = ex3.BST()
+        self.assertEqual(bst.delete(1), NO_ITEM)
+
+class TestAVL(unittest.TestCase):
+    def test_avl_insert_basic1(self):
+        avl = ex3.AVL()
+        avl.insert(1, 'a')
+        self.assertEqual(avl.inorder_traversal(), [1])
+        self.assertEqual(avl.preorder_traversal(), [1])
+        self.assertEqual(avl.postorder_traversal(), [1])
+
+    def test_avl_insert_basic2(self):
+        avl = ex3.AVL()
+        avl.insert(1, 'a')
+        avl.insert(1, 'a')
+        self.assertEqual(avl.inorder_traversal(), [1])
+        self.assertEqual(avl.preorder_traversal(), [1])
+        self.assertEqual(avl.postorder_traversal(), [1])
+
+    def test_avl_insert_update(self):
+        avl = ex3.AVL()
+        avl.insert(1, 'a')
+        self.assertEqual(avl.inorder_traversal(), [1])
+        self.assertEqual(avl.preorder_traversal(), [1])
+        self.assertEqual(avl.postorder_traversal(), [1])
+        avl.insert(1, 'b')
+        self.assertEqual(avl.inorder_traversal(), [1])
+        self.assertEqual(avl.preorder_traversal(), [1])
+        self.assertEqual(avl.postorder_traversal(), [1])
+        node = avl.find(1)
+        self.assertIsNotNone(node)
+        self.assertEqual(node.key, 1)
+        self.assertEqual(node.value, 'b')
+
+    def test_avl_delete_basic1(self):
+        avl = ex3.AVL()
+        self.assertEqual(avl.delete(1), NO_ITEM)
+
+    def test_avl_simple(self):
+        avl = ex3.AVL()
+        avl.insert(1, 'a')
+        avl.insert(2, 'b')
+        avl.insert(3, 'c')
+        self.assertEqual(avl.inorder_traversal(), [1, 2, 3])
+        self.assertEqual(avl.preorder_traversal(), [2, 1, 3])
+        self.assertEqual(avl.postorder_traversal(), [1, 3, 2])
+
+        self.assertEqual(avl.delete(2), OK)
+        self.assertEqual(avl.inorder_traversal(), [1, 3])
+
+    def test_avl_structure(self):
+        avl = ex3.AVL()
+        for i in range(1, 8):
+            avl.insert(i, None)
+        self.assertEqual(avl.inorder_traversal(), [1, 2, 3, 4, 5, 6, 7])
+        self.assertEqual(avl.preorder_traversal(), [4, 2, 1, 3, 6, 5, 7])
+        self.assertEqual(avl.postorder_traversal(), [1, 3, 2, 5, 7, 6, 4])
+
+    def test_avl_balancing_RR(self):
+        avl = ex3.AVL()
+        avl.insert(5, None)
+        avl.insert(10, None)
+        self.assertEqual(avl.preorder_traversal(), [5, 10])
+        avl.insert(15, None)
+        self.assertEqual(avl.preorder_traversal(), [10, 5, 15])    
+
+if __name__ == '__main__':
+    unittest.main()
